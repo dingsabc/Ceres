@@ -4,35 +4,17 @@ import time
 from numpy import fabs
 import re
 from sites import BLE, CAV, CLR, COD, EGL, FYL, THL
+from getTLE import getTLE
+
 
 # TODO : Remove prints
 
 # SITE = [lat(N), long(E), alt(km), horizon(deg), begin coverage (closest to zero), end coverage, begin coverage, end coverage(closest to 360)]
 
-
-def TLE2sat(satno, filename):  # filename = file with TLEs in it
-    ln1 = str("1 " + str(satno))  # Sets up search query for TLE finder
-    ln2 = str("2 " + str(satno))
-    ln1 = re.sub(' +', ' ', ln1)
-
-    searchfile = open(filename, "r")  # Opens TLE file for TLE that matches satno
-    for line in searchfile:
-        if ln1 in line:
-            L1 = line
-
-        if ln2 in line:
-            L2 = line
-    searchfile.close()
-
-    sat = (Orbital(satellite='None', line1=L1, line2=L2))  # sets satno as object
-
-    return sat
-
-
 def get_site_passes(satno, site, duration, filename):  # Duration in hours from current time,  # filename = file with TLEs in it
 
     now = datetime.utcnow()  # set time to current time
-    sat = TLE2sat(satno, filename)  # filename = file with TLEs in it
+    sat = Orbital(satellite='None', line1=getTLE(satno, filename)[0], line2=getTLE(satno, filename)[1])
     x = Orbital.get_next_passes(sat, now, duration, site[1], site[0], site[2], tol=0.001, horizon=site[3])  # builds list of all passes that break 3 degrees
     passes = []  # begins empty list for passes
     for i in x:
