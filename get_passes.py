@@ -39,12 +39,13 @@ def get_site_passes(satno, site, duration, filename):  # Duration in hours from 
             print("Fence Pass | Az:", ex[0])  # prints pass info (used for dev)
             p1 = Orbital.get_observer_look(sat, i[0], site[1], site[0], site[2])[0]  # az when time enters 3 degree bubble FOV
             p2 = Orbital.get_observer_look(sat, i[0] + timedelta(seconds=5), site[1], site[0], site[2])[0]  # p1 5 seconds later
+            p3 = Orbital.get_observer_look(sat, i[1], site[1], site[0], site[2])[0]
             start = i[0]  # sets beginning time to pass start time
 
             if (p1 - p2) < 0:  # if the azimuth is growing after 5 seconds
                 rx = i[0]  # Sets variables so it doesn't mess up other operations
                 ptmp1 = p1  # Sets variables so it doesn't mess up other operations
-                while ptmp1 < site[6]:  # looks for when azimuth breaches sides of coverage
+                while ptmp1 <= site[6] and ptmp1 < p3:  # looks for when azimuth breaches sides of coverage
                     ptmp1 = Orbital.get_observer_look(sat, rx, site[1], site[0], site[2])[0]  # gets new azimuth
                     rx = rx + timedelta(seconds=10)  # sets time for 10s later to retrieve azimuth at that time
                 print("Fence Time:", rx, "Angle:", p1)  # prints pass info (used for dev)
@@ -58,7 +59,7 @@ def get_site_passes(satno, site, duration, filename):  # Duration in hours from 
             if (p1 - p2) > 0:  # if the azimuth is shrinking after 5 seconds
                 rx = i[0]  # Sets variables so it doesn't mess up other operations
                 ptmp2 = p1  # Sets variables so it doesn't mess up other operations
-                while ptmp2 > site[6]:  # looks for when azimuth breaches sides of coverage
+                while ptmp2 >= site[6] and ptmp2 < p3:  # looks for when azimuth breaches sides of coverage
                     ptmp2 = Orbital.get_observer_look(sat, rx, site[1], site[0], site[2])[0]  # gets new azimuth
                     rx = rx + timedelta(seconds=10)
                 print("Fence Time:", rx, "Angle:", p1)  # prints passe info (used for dev)
@@ -79,8 +80,8 @@ def get_site_passes(satno, site, duration, filename):  # Duration in hours from 
             if (p1 - p2) < 0:  # if the azimuth is growing after 5 seconds
                 rx = i[0]  # Sets variables so it doesn't mess up other operations
                 ptmp3 = p1  # Sets variables so it doesn't mess up other operations
-                while ptmp4 < site[6]:  # looks for when azimuth breaches sides of coverage
-                    ptmp4 = Orbital.get_observer_look(sat, rx, site[1], site[0], site[2])[0]  # gets new azimuth
+                while ptmp3 <= site[6] and ptmp3 < p3:  # looks for when azimuth breaches sides of coverage
+                    ptmp3 = Orbital.get_observer_look(sat, rx, site[1], site[0], site[2])[0]  # gets new azimuth
                     rx = rx + timedelta(seconds=10)  # sets time for 10s later to retrieve azimuth at that time
                 print("Fence Time:", rx, "Angle:", p1)  # prints pass info (used for dev)
                 len = int((i[1] - rx).total_seconds())
@@ -94,7 +95,7 @@ def get_site_passes(satno, site, duration, filename):  # Duration in hours from 
             if (p1 - p2) > 0:  # if the azimuth is shrinking after 5 seconds
                 rx = i[0]  # Sets variables so it doesn't mess up other operations
                 ptmp4 = p1  # Sets variables so it doesn't mess up other operations
-                while ptmp4 > site[6]:  # looks for when azimuth breaches sides of coverage
+                while ptmp4 >= site[6] and ptmp3 < p3:  # looks for when azimuth breaches sides of coverage
                     ptmp4 = Orbital.get_observer_look(sat, rx, site[1], site[0], site[2])[0]  # gets new azimuth
                     rx = rx + timedelta(seconds=10)  # sets time for 10s later to retrieve azimuth at that time
                 print("Fence Time:", rx, "Angle:", p1)  # prints pass info (used for dev)
