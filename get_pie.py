@@ -1,8 +1,6 @@
-# TODO:
- # Add comments
-
 import numpy as np
 from getTLE import getTLE
+import datetime
 
 
 def _read_tle_decimal(rep):
@@ -25,6 +23,7 @@ def getPIE(satno, filename):
     XKE = 0.743669161e-1
     XMNPDA = 1440.0
 
+    # def __init__(self, tle):
     satnumber = Line1[2:7]
     excentricity = int(Line2[26:33]) * 10 ** -7
     mean_motion = float(Line2[52:63]) * (np.pi * 2 / XMNPDA)
@@ -59,4 +58,8 @@ def getPIE(satno, filename):
     period = np.pi * 2 / n_0pp
     inclination = (float(Line2[8:16]))
     elset = int(Line2[63:68])
-    return period, inclination, elset
+    epoch_year = str(Line1[18:20])
+    epoch_day = float(Line1[20:32])
+    epoch = np.datetime64(datetime.datetime.strptime(epoch_year, "%y") +
+                          datetime.timedelta(days=epoch_day - 1), 'us')
+    return period, inclination, elset, a_0pp, epoch
