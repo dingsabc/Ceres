@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, date
 import time
 from numpy import fabs
 import re
-from sites import BLE, CAV, CLR, COD, EGL, FYL, THL
 from getTLE import getTLE
 import pandas as pd
 
