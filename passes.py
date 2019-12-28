@@ -43,3 +43,19 @@ def PosNegPassToTable(ESVs, site, CALC_HRS, TLEfile, fileout=None):
     print(final_data.to_csv(index=False))
     final_data.to_csv(fileout, index=False)
     return final_data
+
+
+def combined(ESVs, places, CALC_HRS, TLEfile, fileout=None):
+    appended_data = []
+    for x in ESVs:
+        checkTLE(x)
+        for i in places:
+            run = get_site_passes(x, i, CALC_HRS, TLEfile)
+            appended_data.append(run)
+    final_data = pd.concat(appended_data)
+    final_data = final_data.round({'EnterAz': 3})
+    final_data = final_data.sort_values(by=['PassStart'])
+    final_data = final_data[['SCC', 'PassStart', 'EnterAz', 'Length', 'Site']]
+    # print(final_data.to_csv(index=False))
+    final_data.to_csv(fileout, index=False)
+    return final_data
