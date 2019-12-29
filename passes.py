@@ -3,6 +3,8 @@ from getpie import getPIE
 import pandas as pd
 from datetime import timedelta
 import numpy as np
+from getTLE import getTLE
+
 
 
 def checkTLE(SCC, TLEfile):  # gets new TLE file if more than 7 days old
